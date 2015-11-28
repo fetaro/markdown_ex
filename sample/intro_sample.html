@@ -1,0 +1,88 @@
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" href="main.css" media="all">
+</head>
+<body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body>
+<p>01020304050607080910111213141516171819202122232425262728293031323334353637</p>
+
+</body></html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body>
+<h1 id="section" no="1">1.1.イントロダクション</h1>
+
+
+
+<h2 id="rdb" no="1-1">1-1.RDBだけだと辛くないですか？</h2>
+
+
+<h3 id="section-1" no="1-1-1">1-1-1.リレーショナルデータベースはデファクトスタンダード</h3>
+
+
+<p>現在、ほとんどコンピュータシステムにおいてデータベースはリレーショナルデータベースが採用されています。皆さんの担当されているシステムでもデータベースはリレーショナルデータベースではないでしょうか。DB-ENGINES<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>というWebサイトでは、データベースの各プロダクトについてWeb上での登場回数や転職サイトでのスキル保有数などを集計し、データベースの人気ランキングを紹介しています。このサイトによると、ランキング上位３つのデータベースはOracle、MySQL、そして Microsoft SQL Serverであり、これらは全てリレーショナルデータベースです。ポイントも４位以下と比較してダントツに高いです(<a href=#img_db-ranking.png>図1-1</a>参照)。</p>
+
+<p><img src="img_db-ranking.png" alt="図1-1.DBランキングの抜粋" id="img_db-ranking.png" no="1-1" cited="図1-1"><p>図1-1.DBランキングの抜粋</p></p>
+
+<h4 id="section-2" no="1-1-1-1">1-1-1-1.テーブル設計が大変</h4>
+
+
+<p>まずはじめに問題となったのはテーブル設計です。取得したJSONの一部に着目してみましょう(<a href=#code_twitter-url>リスト1-1</a>)。</p>
+
+<pre title="リスト1-1.取得したtwitterデータの一部" id="code_twitter-url" no="1-1" cited="リスト1-1"><code>リスト1-1.取得したtwitterデータの一部
+
+	"entities" : {
+		"urls" : [　　・・・・・(1)
+			{
+				"display_url" : "dismaying.pw/detail.php?id=…",
+				"expanded_url" : "http://dismaying.pw/detail.php?id=32323735",
+				"indices" : [　　・・・・・(2)
+					0,
+					22
+				],
+				"url" : "http://t.co/W6zFL4bklg"
+			},
+</code></pre>
+
+<p><code>"entries"</code>の中にある<code>"urls"</code>([[twitter-url]]の(1))のキーの値には<code>[</code>という記号が書いてありますが、これは配列の始まりを意味します。この後に続く要素は複数個ある可能性があるわけです。テーブル設計をする場合このような関係は一対多の関係になるため、テーブルを分けるのが一般的です。さらに、<code>"urls"</code>の中にある<code>"indices"</code>(<a href=#code_twitter-url>リスト1-1</a>の(2))も一対多の関係にあります。よって、この部分を表現するためには、追加で２つのテーブルが必要になりました。</p>
+
+<h3 id="nosql" no="1-1-2">1-1-2.NoSQLとは</h3>
+
+
+<p>「NoSQL」という単語に明確な定義はありません(<a href=#column_nosql-meaning>コラム1-1</a>)。しかしNoSQLに分類されるデータベースには共通する特徴があります。本書では理解しやすくするために、NoSQLを以下のように定義しましょう。</p>
+
+<ol>
+  <li>リレーショナルモデル以外を採用し、非構造データが扱える</li>
+  <li>水平分散によりビッグデータを高速に処理できる</li>
+  <li>近年(2005年以降ぐらい)から登場し、広く使われている</li>
+</ol>
+
+<div class="column" title="コラム1-1.NoSQLという名前は紛らわしい" id="column_nosql-meaning" no="1-1" cited="コラム1-1"><pre>コラム1-1.NoSQLという名前は紛らわしい
+
+
+
+筆者はNoSQLという名前は好きではありません。二つ理由があります。
+
+一つ目は、「No SQL」と読むとSQLを否定している意味になるためです。この呼び方は、以前はリレーショナルデータベース陣営から猛烈に反発を食らいました。最近ではようやく「Not Only SQL」の意味合いが理解されてきましたが、それでも紛らわしいと思います。「No SQL」と誤解されないように「NOSQL」とOを大文字にして表現されている方もいるぐらいです。
+
+二つ目の理由は、Not Onlyだとしても意味が大きすぎることです。本文でも書きましたが、SQLだけではないデータベースは山ほどあります。OpenLDAPしかりSolrしかりです。現在NoSQLと呼ばれているデータベースはその中の一部です。
+
+おそらくNoSQLという名前はほどなくなくなるでしょう。どう呼ばれるかというと、ドキュメント型データベース、グラフ型データベース、キーバリューストアなど、データモデルに従った呼ばれ方をするでしょう。
+
+それでもあえて名前を付けるのであれば、スケーラブル・スキーマレス・オペレーショナルデータベースでしょうか（笑）
+
+</pre>
+</div>
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>http://db-engines.com/en/ranking <a href="#fnref:1" class="reversefootnote">↩</a></p>
+    </li>
+  </ol>
+</div>
+</body></html>
+
+</body>
+</html>
