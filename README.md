@@ -96,21 +96,21 @@ markdownの表
 ■■コード/リスト(渡部独自)
 
 {: title="タイトル" id="識別子"}
-~~~
+~~~   (チルダ×3)
 コード本文
-~~~
+~~~   (チルダ×3)
 
 ※titleは必須。idは参照しなければ省略可能
 
 例)
 
 {: title="プログラムのサンプル" id="sample.java"}
-~~~
+~~~   (チルダ×3)
 import xxx
 public static void main(String argv[]){
     System.out.println("hello world");
 }
-~~~
+~~~   (チルダ×3)
 
 
 ■■コラム(渡部独自)
